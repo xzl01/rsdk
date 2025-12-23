@@ -81,6 +81,17 @@ main() {
 	export RSDK_OPTION_DEB_DIR="${RSDK_OPTION_DEB_DIR:-${TMPDIR:-/tmp}/rsdk-deb}"
 	export RSDK_OPTION_DEFAULT_DISTRO="${RSDK_OPTION_DEFAULT_DISTRO:-true}"
 
+	# Query GitHub directly for package repositories and their latest tags
+	mapfile -t RSDK_PKG_REPO_ARRAY < <(gh repo list "$RSDK_PACKAGE_ORG" --no-archived --visibility public --limit 65535 --json name --jq '.[].name') && array_remove "RSDK_PKG_REPO_ARRAY" ""
+	
+	local RSDK_TEMP_TAGS=()
+	for repo in "${RSDK_PKG_REPO_ARRAY[@]}"; do
+		local tag
+		tag="$(gh release list --exclude-drafts --exclude-pre-releases --json tagName,isLatest --jq '.[] | select(.isLatest).tagName' --repo "$RSDK_PACKAGE_ORG/$repo")"
+		RSDK_TEMP_TAGS+=("$tag")
+	done
+	RSDK_PKG_REPO_TAG_ARRAY=("${RSDK_TEMP_TAGS[@]}")
+
 	while true; do
 		TEMP="$1"
 		shift
