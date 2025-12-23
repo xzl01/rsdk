@@ -81,9 +81,6 @@ main() {
 	export RSDK_OPTION_DEB_DIR="${RSDK_OPTION_DEB_DIR:-${TMPDIR:-/tmp}/rsdk-deb}"
 	export RSDK_OPTION_DEFAULT_DISTRO="${RSDK_OPTION_DEFAULT_DISTRO:-true}"
 
-	mapfile -t RSDK_PKG_REPO_ARRAY < <(jq -er 'to_entries[].key' pkgs.json) && array_remove "RSDK_PKG_REPO_ARRAY" ""
-	mapfile -t RSDK_PKG_REPO_TAG_ARRAY < <(jq -er 'to_entries[].value' pkgs.json) && array_remove "RSDK_PKG_REPO_TAG_ARRAY" ""
-
 	while true; do
 		TEMP="$1"
 		shift

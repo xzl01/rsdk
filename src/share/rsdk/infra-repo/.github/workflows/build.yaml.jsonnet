@@ -13,15 +13,11 @@ function(
                     "main",
                 ],
                 paths: [
-                    "pkgs.json",
-                    "pkgs.lock",
                     ".github/workflows/build.yaml",
                 ],
             },
             pull_request: {
                 paths: [
-                    "pkgs.json",
-                    "pkgs.lock",
                     ".github/workflows/build.yaml",
                 ]
             },
@@ -102,7 +98,7 @@ function(
                             export RSDK_REPO_ORIGIN="${suites[0]}"
 
                             pushd "$HOME/.aptly/public/$RSDK_REPO_ORIGIN/"
-                                cp "$OLDPWD/pkgs.json" "$OLDPWD/install.sh" ./
+                                cp "$OLDPWD/install.sh" ./
                                 pandoc --from gfm --to html --standalone "$OLDPWD/README.md" --output index.html
                                 find . > files.list
                                 echo "pages=$(realpath .)" | tee -a $GITHUB_OUTPUT

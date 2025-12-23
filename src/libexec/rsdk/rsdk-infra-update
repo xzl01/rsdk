@@ -195,10 +195,6 @@ main() {
 		mapfile -t RSDK_GIT_REPO_ARRAY < <(jq -er '.[].supported_suites[]' "$SCRIPT_DIR/../../share/rsdk/configs/distributions.json") && array_remove "RSDK_GIT_REPO_ARRAY" ""
 		RSDK_GIT_REPO_TEMPLATE="$SCRIPT_DIR/../../share/rsdk/infra-repo"
 		RSDK_TARGET_ORGANIZATION="$RSDK_APT_REPO_ORG"
-		RSDK_GIT_REPO_KEEP_FILES=(
-			"pkgs.json"
-			"pkgs.lock"
-		)
 		repo_desc() {
 			local distro type target="$1"
 			target="${target%-test}"

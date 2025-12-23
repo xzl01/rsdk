@@ -45,7 +45,6 @@ function(suite, radxa_mirror, radxa_repo_suffix, product, temp_dir, install_vsco
             [
                 |||
                     echo deb %(radxa_url)s%(product_soc)s-%(suite)s %(product_soc)s-%(suite)s main > "$1/etc/apt/sources.list.d/80-radxa-%(product_soc)s.list"
-                    wget -O "$1/etc/rsdk/80-radxa-%(product_soc)s.pkgs.json" %(radxa_url)s%(product_soc)s-%(suite)s/pkgs.json
                 ||| % {
                     radxa_url: radxa_url(radxa_mirror),
                     suite: suite + radxa_repo_suffix,
@@ -56,7 +55,6 @@ function(suite, radxa_mirror, radxa_repo_suffix, product, temp_dir, install_vsco
             [
                 |||
                     echo deb %(radxa_url)s%(suite)s %(product_soc_family)s-%(suite)s main > "$1/etc/apt/sources.list.d/80-radxa-%(product_soc_family)s.list"
-                    wget -O "$1/etc/rsdk/80-radxa-%(product_soc_family)s.pkgs.json" %(radxa_url)s%(suite)s/pkgs.json
                 ||| % {
                     radxa_url: radxa_url(radxa_mirror),
                     suite: suite + radxa_repo_suffix,
@@ -66,13 +64,7 @@ function(suite, radxa_mirror, radxa_repo_suffix, product, temp_dir, install_vsco
         ) + [
             |||
                 echo deb %(radxa_url)s%(suite)s %(suite)s main > "$1/etc/apt/sources.list.d/70-radxa.list"
-                wget -O "$1/etc/rsdk/70-radxa.pkgs.json" %(radxa_url)s%(suite)s/pkgs.json
             ||| % {
-                    radxa_url: radxa_url(radxa_mirror),
-                    suite: suite + radxa_repo_suffix,
-                },
-            'curl -L -o "$1/etc/radxa_apt_snapshot" %(radxa_url)s%(suite)s/pkgs.json'
-                % {
                     radxa_url: radxa_url(radxa_mirror),
                     suite: suite + radxa_repo_suffix,
                 },
