@@ -88,9 +88,17 @@ main() {
 	for repo in "${RSDK_PKG_REPO_ARRAY[@]}"; do
 		local tag
 		tag="$(gh release list --exclude-drafts --exclude-pre-releases --json tagName,isLatest --jq '.[] | select(.isLatest).tagName' --repo "$RSDK_PACKAGE_ORG/$repo")"
-		RSDK_TEMP_TAGS+=("$tag")
+		if [[ -n "$tag" ]]; then
+			RSDK_TEMP_TAGS+=("$tag")
+		else
+			echo "Warning: No release found for $RSDK_PACKAGE_ORG/$repo, skipping..."
+			# Remove the repo from the array since it has no releases
+			RSDK_PKG_REPO_ARRAY=("${RSDK_PKG_REPO_ARRAY[@]/$repo}")
+		fi
 	done
 	RSDK_PKG_REPO_TAG_ARRAY=("${RSDK_TEMP_TAGS[@]}")
+	# Clean up empty entries from array
+	array_remove "RSDK_PKG_REPO_ARRAY" ""
 
 	while true; do
 		TEMP="$1"
