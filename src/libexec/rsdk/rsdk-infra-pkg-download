@@ -81,8 +81,24 @@ main() {
 	export RSDK_OPTION_DEB_DIR="${RSDK_OPTION_DEB_DIR:-${TMPDIR:-/tmp}/rsdk-deb}"
 	export RSDK_OPTION_DEFAULT_DISTRO="${RSDK_OPTION_DEFAULT_DISTRO:-true}"
 
-	mapfile -t RSDK_PKG_REPO_ARRAY < <(jq -er 'to_entries[].key' pkgs.json) && array_remove "RSDK_PKG_REPO_ARRAY" ""
-	mapfile -t RSDK_PKG_REPO_TAG_ARRAY < <(jq -er 'to_entries[].value' pkgs.json) && array_remove "RSDK_PKG_REPO_TAG_ARRAY" ""
+	# Query GitHub directly for package repositories and their latest tags
+	mapfile -t RSDK_PKG_REPO_ARRAY < <(gh repo list "$RSDK_PACKAGE_ORG" --no-archived --visibility public --limit 65535 --json name --jq '.[].name') && array_remove "RSDK_PKG_REPO_ARRAY" ""
+	
+	local RSDK_TEMP_TAGS=()
+	for repo in "${RSDK_PKG_REPO_ARRAY[@]}"; do
+		local tag
+		tag="$(gh release list --exclude-drafts --exclude-pre-releases --json tagName,isLatest --jq '.[] | select(.isLatest).tagName' --repo "$RSDK_PACKAGE_ORG/$repo")"
+		if [[ -n "$tag" ]]; then
+			RSDK_TEMP_TAGS+=("$tag")
+		else
+			echo "Warning: No release found for $RSDK_PACKAGE_ORG/$repo, skipping..."
+			# Remove the repo from the array since it has no releases
+			RSDK_PKG_REPO_ARRAY=("${RSDK_PKG_REPO_ARRAY[@]/$repo}")
+		fi
+	done
+	RSDK_PKG_REPO_TAG_ARRAY=("${RSDK_TEMP_TAGS[@]}")
+	# Clean up empty entries from array
+	array_remove "RSDK_PKG_REPO_ARRAY" ""
 
 	while true; do
 		TEMP="$1"

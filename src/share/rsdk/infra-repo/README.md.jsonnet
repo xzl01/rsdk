@@ -9,7 +9,6 @@ function(
 
     ## Content
 
-    * [Published GitHub Releases](https://%(repo_org)s.github.io/%(target)s/pkgs.json)
     * [File index](https://%(repo_org)s.github.io/%(target)s/files.list)
 
     ## Report issues
