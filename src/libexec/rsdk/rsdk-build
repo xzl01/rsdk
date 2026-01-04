@@ -198,11 +198,7 @@ main() {
 	local RSDK_OPTION_SYSTEMD_BOOT="${RSDK_OPTION_SYSTEMD_BOOT:-false}"
 	local RSDK_OPTION_SECTOR_SIZE="${RSDK_OPTION_SECTOR_SIZE:-512}"
 	local RSDK_OPTION_DRY_RUN="${RSDK_OPTION_DRY_RUN:-false}"
-	local RSDK_OPTION_PKGS_JSON="${RSDK_OPTION_PKGS_JSON:-}"
-	local RSDK_OPTION_PKGS_JSON_SET="false"
-	if [[ -n $RSDK_OPTION_PKGS_JSON ]]; then
-		RSDK_OPTION_PKGS_JSON_SET="true"
-	fi
+	local RSDK_OPTION_PKGS_JSON="${RSDK_OPTION_PKGS_JSON:-true}"
 
 	while true; do
 		TEMP="$1"
@@ -220,7 +216,6 @@ main() {
 			;;
 		-P | --no-pkgs-json)
 			RSDK_OPTION_PKGS_JSON="false"
-			RSDK_OPTION_PKGS_JSON_SET="true"
 			;;
 		--dry-run)
 			RSDK_OPTION_DRY_RUN="true"
@@ -279,18 +274,6 @@ main() {
 			;;
 		esac
 	done
-
-	if [[ $RSDK_OPTION_PKGS_JSON_SET != "true" ]]; then
-		case "$RSDK_OPTION_RADXA_MIRROR" in
-		"" | "https://radxa-repo.github.io" | "https://radxa-repo.github.io/" | "https://radxa-repo.github.io/radxa-deb" | "https://radxa-repo.github.io/radxa-deb/")
-			RSDK_OPTION_PKGS_JSON="true"
-			;;
-		*)
-			# Third-party radxa-deb mirrors usually don't provide pkgs.json
-			RSDK_OPTION_PKGS_JSON="false"
-			;;
-		esac
-	fi
 
 	if (($# == 0)); then
 		"$0" --help

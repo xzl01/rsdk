@@ -78,8 +78,8 @@ __rsdk_build() {
 		return
 	fi
 
-	# Ask user whether to change APT mirrors first
-	if yesno "Do you want to change APT mirrors?\n\nIf you select No, default mirrors will be used."; then
+	# Ask user whether to configure mirrors first
+	if yesno "Do you want to configure mirror?\n\nIf you select No, default software sources will be used."; then
 		__rsdk_select_radxa_mirror || true
 		__rsdk_select_distro_mirror || true
 	fi

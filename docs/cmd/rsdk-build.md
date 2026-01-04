@@ -21,7 +21,7 @@ rsdk build rock-3c bullseye cli
 
 	If you pass a third‑party radxa-deb mirror here, `rsdk` will **disable Radxa pkgs.json usage by default**, because those mirrors usually do not provide `pkgs.json`.
 
-- `-m <distro-mirror>`: change Debian/Ubuntu mirror. For example:
+- `-m | --mirror <distro-mirror>`: change Debian/Ubuntu mirror. For example:
 
 	```bash
 	rsdk build -m https://mirrors.ustc.edu.cn rock-3c
@@ -38,8 +38,8 @@ rsdk build \
 
 ## Radxa pkgs.json option
 
-By default, when using the official Radxa repository (`https://radxa-repo.github.io/radxa-deb` and its variants), `rsdk` downloads and embeds Radxa `pkgs.json` metadata into the image.  
-For third‑party radxa-deb mirrors, this metadata is disabled by default.
+By default, when using the official Radxa repository (`https://radxa-repo.github.io/radxa-deb` and its variants), `rsdk` downloads and embeds Radxa `pkgs.json` metadata into the image.
+For third‑party radxa-deb mirrors that do not provide `pkgs.json`, you may want to disable this behavior.
 
 You can explicitly skip downloading and embedding `pkgs.json` by using:
 

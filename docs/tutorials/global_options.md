@@ -22,9 +22,9 @@ then change `RSDK_OPTION_*_MIRROR` to your own address. Typical options are:
 - `RSDK_OPTION_DISTRO_MIRROR`: default Debian/Ubuntu mirror (equivalent to `rsdk build -m`).
 - `RSDK_OPTION_RADXA_MIRROR`: default Radxa APT mirror for radxa-deb (equivalent to `rsdk build -M`).
 
-When using a third‑party radxa-deb mirror via `RSDK_OPTION_RADXA_MIRROR`, `rsdk` will automatically
-disable Radxa `pkgs.json` usage by default. You can still override this behavior at build time by
-passing `-P`/`--no-pkgs-json` or by setting `RSDK_OPTION_PKGS_JSON` explicitly.
+When using Radxa repositories, `rsdk` will use Radxa `pkgs.json` metadata by default whenever it is available.
+You can disable this behavior at build time by passing `-P`/`--no-pkgs-json` or by setting
+`RSDK_OPTION_PKGS_JSON=false` explicitly in the environment.
 
 Below are example NixOS configuration to set up a local apt cache service, as
 well as the mirror definition for `acng.conf` file. They may not be complete, so
